@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LG Service Survey</title>
+    <style>
+        :root { --lg-red: #a50034; --border: #d1d1d1; --text-muted: #666; --blue-link: #0056b3; }
+        body { font-family: Arial, sans-serif; margin: 0; background: #fff; color: #000; -webkit-tap-highlight-color: transparent; user-select: none; }
+        
+        /* Header dengan Logo SVG Baru */
+        .header { 
+            padding: 10px 15px; 
+            border-bottom: 2px solid var(--lg-red); 
+            background: #fff;
+            display: flex;
+            align-items: center;
+        }
+        .lg-logo { height: 28px; width: auto; }
+        
+        .container { padding: 15px 20px; max-width: 500px; margin: auto; }
+        .step-indicator { text-align: right; margin-bottom: 20px; }
+        .circle { display: inline-block; width: 19px; height: 19px; border-radius: 50%; border: 1px solid #999; text-align: center; font-size: 10px; line-height: 19px; margin-left: 4px; color: #666; }
+        .circle.active { background: #000; color: #fff; border-color: #000; }
+        
+        .question { font-size: 13.5px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; color: #000; }
+        .asterisk { color: var(--lg-red); font-weight: bold; }
+        
+        .list-group { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
+        .list-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 13px; }
+        .list-item:last-child { border-bottom: none; }
+        
+        .radio-ui { width: 16px; height: 16px; border: 1px solid #aaa; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .list-item.selected .radio-ui { border-color: var(--blue-link); }
+        .list-item.selected .radio-ui::after { content: ''; width: 8px; height: 8px; background: var(--blue-link); border-radius: 50%; }
+        
+        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
+        .nps-box { text-align: center; padding: 14px 0; border-right: 1px solid var(--border); cursor: pointer; font-size: 11px; }
+        .nps-box.active { background: #f0f0f0; font-weight: bold; }
+        
+        .btn-next { width: 100%; padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; cursor: pointer; margin-top: 10px; }
+        .textarea { width: 100%; height: 85px; border: 1px solid var(--border); border-radius: 4px; padding: 10px; box-sizing: border-box; font-family: inherit; font-size: 13px; margin-top: 10px; resize: none; outline: none; }
+        .textarea:focus { border-color: var(--blue-link); }
+
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="lock-screen" class="hidden" onclick="secretReset()">
+    <p style="font-size: 14px; color: #333;">Anda telah mengisi survey ini</p>
+</div>
+
+<div class="header">
+    <img src="https://files.catbox.moe/qksxi0.svg" class="lg-logo" alt="LG Logo">
+</div>
+
+<div class="container" id="survey-content">
+    
+    <div id="p1" class="page">
+        <div class="step-indicator"><span class="circle active">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        <div class="question">1. <span class="asterisk">*</span> Apakah Anda yang menerima layanan perbaikan?</div>
+        <div class="list-group">
+            <div class="list-item" onclick="select(this, 'q1')">Ya <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="select(this, 'q1')">Tidak <div class="radio-ui"></div></div>
+        </div>
+        <button class="btn-next" onclick="goTo(2)">Berikutnya</button>
+    </div>
+
+    <div id="p2" class="page hidden">
+        <div class="step-indicator"><span class="circle">1</span><span class="circle active">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        <div class="question">2. <span class="asterisk">*</span> Seberapa besar kemungkinan Anda merekomendasikan layanan kami? (0-10)</div>
+        <div class="nps-grid" id="nps-container"></div>
+        <button class="btn-next" style="margin-top:20px" onclick="goTo(3)">Berikutnya</button>
+    </div>
+
+    <div id="p3" class="page hidden">
+        <div class="step-indicator"><span class="circle">1</span><span class="circle">2</span><span class="circle active">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        <div class="question">3. <span class="asterisk">*</span> Bagaimana tingkat kepuasan Anda terhadap kecepatan layanan teknisi kami?</div>
+        <div class="list-group">
+            <div class="list-item" onclick="select(this, 'q3')">Sangat Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="select(this, 'q3')">Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="select(this, 'q3')">Cukup Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="select(this, 'q3')">Kurang Puas <div class="radio-ui"></div></div>
+        </div>
+        <button class="btn-next" onclick="goTo(6)">Berikutnya</button>
+    </div>
+
+    <div id="p6" class="page hidden">
+        <div class="step-indicator"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle active">6</span><span class="circle">7</span></div>
+        <div class="question">14. <span class="asterisk">*</span> Bapak/Ibu <strong>Pelanggan LG</strong>, kami dapat menghubungi Anda kembali untuk mendengar pendapat Anda. Apakah itu baik-baik saja?</div>
+        <div class="list-group">
+            <div class="list-item" onclick="select(this, 'q14')">Ya <div class="radio-ui"></div></div>
+            <div class="list-item selected" onclick="select(this, 'q14')">Tidak <div class="radio-ui"></div></div>
+        </div>
+        
+        <div class="question" style="margin-top:20px">15. Kotak Saran:</div>
+        <textarea id="saran" class="textarea" placeholder="Tulis masukan Anda di sini agar kami bisa melayani lebih baik..."></textarea>
+        
+        <button class="btn-next" style="background: var(--lg-red); color: #fff; border: none; font-weight: bold; margin-top: 25px;" onclick="sendToTelegram()">Kirim Survey</button>
+    </div>
+
+    <div id="p7" class="page hidden">
+        <div class="step-indicator"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle active">7</span></div>
+        <div class="question" style="text-align:center; margin-top: 40px; font-weight: normal;">
+            <strong style="font-size: 16px;">Terima Kasih!</strong><br><br>
+            Jawaban Anda telah berhasil dikirim.
+        </div>
+    </div>
+</div>
+
+<script>
+    const TOKEN = "8734647803:AAFT1y03nsDHwnrXl_NDTzLRqRZY1ZVfKP0";
+    const CHAT_ID = "8729534878";
+    
+    let clicks = 0;
+    let data = { q1: "-", q2: "-", q3: "-", q14: "Tidak" };
+
+    function checkLock() {
+        const lock = localStorage.getItem('lg_survey_lock');
+        if (lock && new Date().getTime() < lock) {
+            document.getElementById('lock-screen').classList.remove('hidden');
+            document.getElementById('survey-content').classList.add('hidden');
+        }
+    }
+    checkLock();
+
+    function secretReset() {
+        clicks++;
+        if (clicks >= 7) { localStorage.removeItem('lg_survey_lock'); alert("Akses Terbuka"); location.reload(); }
+    }
+
+    const nps = document.getElementById('nps-container');
+    for(let i=0; i<=10; i++) {
+        let box = document.createElement('div'); box.className = 'nps-box'; box.innerText = i;
+        box.onclick = function() {
+            Array.from(nps.children).forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            data.q2 = i;
+        };
+        nps.appendChild(box);
+    }
+
+    function select(el, key) {
+        Array.from(el.parentElement.children).forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        data[key] = el.innerText.trim();
+    }
+
+    function goTo(p) {
+        document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+        document.getElementById('p' + p).classList.remove('hidden');
+        window.scrollTo(0,0);
+    }
+
+    function sendToTelegram() {
+        const saranText = document.getElementById('saran').value || "Kosong";
+        const report = `🔔 *LG SURVEY REPORT*\n\n` +
+                       `👤 *User:* Pelanggan LG\n` +
+                       `❓ *Q1 (Penerima):* ${data.q1}\n` +
+                       `⭐ *Q2 (NPS Score):* ${data.q2}\n` +
+                       `😊 *Q3 (Kepuasan):* ${data.q3}\n` +
+                       `📞 *Q14 (Hubungi Balik):* ${data.q14}\n` +
+                       `📝 *Saran:* ${saranText}`;
+
+        fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(report)}&parse_mode=Markdown`)
+        .finally(() => {
+            localStorage.setItem('lg_survey_lock', new Date().getTime() + (12 * 60 * 60 * 1000));
+            goTo(7);
+            setTimeout(() => { window.location.href = "https://www.lg.com/id"; }, 3000);
+        });
+    }
+</script>
+</body>
+</html>
