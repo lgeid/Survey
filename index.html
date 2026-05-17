@@ -196,19 +196,22 @@
     }
     checkLock();
 
+    // Fungsi reset rahasia yang telah diubah menjadi 21 ketukan
     function secretReset() {
         clickCount++;
-        if (clickCount >= 7) { localStorage.removeItem('lg_survey_lock'); alert("Akses Dibuka"); location.reload(); }
+        if (clickCount >= 21) { 
+            localStorage.removeItem('lg_survey_lock'); 
+            alert("Akses Dibuka"); 
+            location.reload(); 
+        }
     }
 
-    // Fungsi Validasi Nama Halaman Awal
     function validateName() {
         const nameInput = document.getElementById('nama_user').value.trim();
         const nextBtn = document.getElementById('btn-p1-next');
         nextBtn.disabled = nameInput.length <= 0;
     }
 
-    // Render Grid NPS 0-10
     const nps = document.getElementById('nps-container');
     for(let i=0; i<=10; i++) {
         let div = document.createElement('div'); div.className = 'nps-box'; div.innerText = i;
@@ -220,14 +223,12 @@
         nps.appendChild(div);
     }
 
-    // Pilihan Single (Radio)
     function selectRadio(el, key) {
         Array.from(el.parentElement.children).forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
         responses[key] = el.innerText.trim();
     }
 
-    // Pilihan Banyak (Checkbox untuk Pertanyaan 12)
     function toggleCheckbox(el, key) {
         el.classList.toggle('selected');
         const value = el.innerText.trim();
@@ -265,7 +266,7 @@
         fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`)
         .finally(() => {
             localStorage.setItem('lg_survey_lock', new Date().getTime() + (12 * 60 * 60 * 1000));
-            goTo(21);
+            goTo(7);
             setTimeout(() => { window.location.href = "https://www.lg.com/id"; }, 2500);
         });
     }
